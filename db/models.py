@@ -33,6 +33,7 @@ class User(Base):
     comment = relationship('Comment', back_populates='user')
     post = relationship('UserPost', back_populates='user')
 
+
 class UserPost(Base):
     __tablename__ = 'posts'
 
