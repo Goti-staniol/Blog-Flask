@@ -25,6 +25,7 @@ class User(Base):
 
     user_id = Column(Integer, primary_key=True)
 
+    username = Column(String, nullable=False)
     email = Column(String, nullable=False)
     password = Column(String, nullable=False)
     admin = Column(Boolean, default=False)
