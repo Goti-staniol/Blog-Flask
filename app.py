@@ -4,6 +4,8 @@ app = Flask(__name__)
 
 registered_users = {}
 
+has_posts = True
+
 @app.route('/', methods=['GET', 'POST'])
 def register():
     # if request.method == 'POST':
@@ -18,7 +20,10 @@ def register():
     #     print(f"Registered users: {registered_users}")
     #     return f"User {username} registered successfully!"
 
-    return render_template('main.html')
+    if has_posts:
+        return render_template('available_posts_main.html')
+
+    return render_template('no_posts_main.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
