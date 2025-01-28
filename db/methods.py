@@ -5,7 +5,11 @@ from db.models import (
     engine
 )
 from sqlalchemy.orm import Session, sessionmaker
+
+from datetime import datetime
 from typing import List, Type
+
+import json
 
 def get_session() -> Session:
     session = sessionmaker(bind=engine)
@@ -35,15 +39,19 @@ def add_post(
     user_id: int,
     img: any,
     title: str,
-    desc: str
+    desc: str,
+    tags: list,
+    add_time: datetime
 ) -> None:
     with get_session() as session:
         session.add(
             UserPost(
                 user_id=user_id,
-                img=img,
-                title=title,
-                desc=desc
+                post_img=img,
+                post_title=title,
+                post_desc=desc,
+                post_tags=json.dumps(tags) if tags else None,
+                post_datetime=add_time
             )
         )
         session.commit()

@@ -43,6 +43,8 @@ class UserPost(Base):
     post_title = Column(String, nullable=False)
     post_desc = Column(String, nullable=True)
     post_img = Column(LargeBinary, nullable=True)
+    post_tags = Column(String, nullable=True)
+    post_datetime = Column(DateTime, nullable=False)
 
     comment = relationship('Comment', back_populates='post')
     user = relationship('User', back_populates='post')
