@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Form</title>
+    <title>Login Form</title>
     <style>
         body {
             margin: 0;
@@ -15,7 +15,7 @@
             align-items: center;
             height: 100vh;
         }
-        .registration-form {
+        .login-form {
             background: #fff;
             padding: 20px 30px;
             border-radius: 10px;
@@ -23,18 +23,18 @@
             max-width: 400px;
             width: 100%;
         }
-        .registration-form h2 {
+        .login-form h2 {
             text-align: center;
             color: #333;
             margin-bottom: 20px;
         }
-        .registration-form label {
+        .login-form label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
             color: #555;
         }
-        .registration-form input {
+        .login-form input {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -42,11 +42,11 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
-        .registration-form input:focus {
+        .login-form input:focus {
             border-color: #6c5ce7;
             outline: none;
         }
-        .registration-form button {
+        .login-form button {
             width: 100%;
             padding: 10px;
             background: #6c5ce7;
@@ -57,25 +57,36 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-        .registration-form button:hover {
+        .login-form button:hover {
             background: #5a4dbd;
+        }
+        .login-form p {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .login-form a {
+            color: #6c5ce7;
+            text-decoration: none;
+        }
+        .login-form a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="registration-form">
-        <h2>Registration</h2>
-        <form method="POST" action="/register">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required>
-
+    <div class="login-form">
+        <h2>Login</h2>
+        <form method="POST" action="/login">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" placeholder="Enter your email" required>
 
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="Enter your password" required>
 
-            <button type="submit">Register</button>
+            <button type="submit">Login</button>
+
+            <p>Don't have an account? <a href="/register">Register here</a></p>
         </form>
     </div>
 </body>

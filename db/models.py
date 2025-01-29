@@ -1,4 +1,7 @@
-from dotenv import load_dotenv
+from cfg import DB_URL
+
+from flask_login import UserMixin
+
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import (
@@ -11,16 +14,11 @@ from sqlalchemy import (
     DateTime
 )
 
-import os
-
-load_dotenv()
-DB_URL = os.getenv('DB_URL')
-
 engine = create_engine(DB_URL)
 Base = declarative_base()
 
 
-class User(Base):
+class User(Base, UserMixin):
     __tablename__ = 'users'
 
     user_id = Column(Integer, primary_key=True)
@@ -33,12 +31,15 @@ class User(Base):
     comment = relationship('Comment', back_populates='user')
     post = relationship('UserPost', back_populates='user')
 
+    def get_id(self):
+        return str(self.user_id)
+
 
 class UserPost(Base):
     __tablename__ = 'posts'
 
     post_id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    user_id = Column(Integer, ForeignKey(User.user_id), nullable=False)
     post_like = Column(Integer, default=0)
     post_title = Column(String, nullable=False)
     post_desc = Column(String, nullable=True)
