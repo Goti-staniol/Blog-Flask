@@ -1,4 +1,4 @@
-from db.models import (
+from app.database.models import (
     User,
     UserPost,
     Comment,
@@ -15,25 +15,30 @@ def get_session() -> Session:
     session = sessionmaker(bind=engine)
     return session()
 
-def add_new_user(email: str, password: str) -> None:
+def add_new_user(username: str, email: str, password: str) -> None:
     with get_session() as session:
-        session.add(User(email=email, password=password))
+        user = User(
+            username=username,
+            email=email,
+            password=password
+        )
+        session.add(user)
         session.commit()
 
-def check_user(email: str, password: str) -> bool:
-    with get_session() as session:
-        user = session.query(User).filter_by(
-            email=email
-        ).first()
-
-        if user:
-            if user.password == password:
-                return True
-            else:
-                return False
-        else:
-            add_new_user(email, password)
-            return True
+# def check_user(email: str, password: str) -> bool:
+#     with get_session() as session:
+#         user = session.query(User).filter_by(
+#             email=email
+#         ).first()
+#
+#         if user:
+#             if user.password == password:
+#                 return True
+#             else:
+#                 return False
+#         else:
+#             add_new_user(email, password)
+#             return True
 
 def add_post(
     user_id: int,
@@ -55,6 +60,23 @@ def add_post(
             )
         )
         session.commit()
+
+def get_user(user_id) -> Type[User]:
+    with get_session() as session:
+        user = session.query(User).filter_by(
+            user_id=user_id
+        ) .first()
+
+        return user
+
+def get_user_by_email(email: str) -> Type[User]:
+    with get_session() as session:
+        user = session.query(User).filter_by(
+            email=email
+        ).first()
+
+        if user:
+            return user
 
 def get_posts() -> List[Type[UserPost]]:
     with get_session() as session:

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% if posts %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      {% for post in posts %}
+        <div class="col">
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h5 class="card-title">{{ post.title }}</h5>
+              <p class="card-text">{{ post.content }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a href="/post/{{ post.id }}" class="btn btn-sm btn-outline-secondary">View</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="d-flex justify-content-center align-items-center vh-50 bg-light">
+      <div class="text-center text-muted">
+        <h2 style="color: grey;">Пока ничего нет!</h2>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

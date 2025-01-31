@@ -2,5 +2,8 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-DB_URL = os.getenv('DB_URL')
-SECRET_KEY = os.getenv('SECRET_KEY')
+
+class Config:
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
