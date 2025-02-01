@@ -72,21 +72,34 @@
         .login-form a:hover {
             text-decoration: underline;
         }
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="login-form">
         <h2>Login</h2>
-        <form method="POST" action="/login">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        <form method="POST">
+            {{ form.hidden_tag() }}
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <label for="email">{{ form.email.label }}</label>
+            {{ form.email(size=32, placeholder="Enter your email") }}
+            {% for error in form.email.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
 
-            <button type="submit">Login</button>
+            <label for="password">{{ form.password.label }}</label>
+            {{ form.password(size=32, placeholder="Enter your password") }}
+            {% for error in form.password.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
 
-            <p>Don't have an account? <a href="/register">Register here</a></p>
+            {{ form.submit(class="button") }}
+
+            <p>Don't have an account? <a href="{{ url_for('main.register') }}">Register here</a></p>
         </form>
     </div>
 </body>

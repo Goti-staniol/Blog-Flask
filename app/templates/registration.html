@@ -60,22 +60,38 @@
         .registration-form button:hover {
             background: #5a4dbd;
         }
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="registration-form">
         <h2>Registration</h2>
-        <form method="POST" action="/register">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        <form method="POST">
+            {{ form.hidden_tag() }}
 
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            <label for="username">{{ form.username.label }}</label>
+            {{ form.username(size=32, placeholder="Enter your username") }}
+            {% for error in form.username.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <label for="email">{{ form.email.label }}</label>
+            {{ form.email(size=32, placeholder="Enter your email") }}
+            {% for error in form.email.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
 
-            <button type="submit">Register</button>
+            <label for="password">{{ form.password.label }}</label>
+            {{ form.password(size=32, placeholder="Enter your password") }}
+            {% for error in form.password.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+
+            {{ form.submit(class="button") }}
         </form>
     </div>
 </body>
