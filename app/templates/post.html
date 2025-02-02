@@ -52,9 +52,8 @@
           <div class="form-container">
             <h2>Создать пост</h2>
 
-            <!-- Форма с использованием Flask-WTF -->
             <form method="POST" action="{{ url_for('main.add_post') }}" enctype="multipart/form-data">
-              {{ form.hidden_tag() }}  <!-- CSRF-токен -->
+              {{ form.hidden_tag() }}
 
               <!-- Поле для заголовка -->
               <div class="mb-4">

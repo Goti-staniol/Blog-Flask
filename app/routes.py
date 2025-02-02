@@ -1,5 +1,4 @@
 import os
-import re
 
 from flask import (
     render_template,
@@ -11,6 +10,7 @@ from flask import (
 )
 
 from flask_login import login_user, logout_user, login_required, current_user
+from sqlalchemy.dialects.postgresql.pg_catalog import pg_am
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from sqlalchemy.exc import IntegrityError
@@ -31,6 +31,8 @@ def load_user(user_id):
 @main_route.route('/')
 def home():
     posts = Post.query.all()
+    for post in posts:
+        print(post.photo_path)
     return render_template('index.html', posts=posts, user=User)
 
 
@@ -95,6 +97,7 @@ def add_post():
         photo_name = None
         if form.photo.data:
             photo = form.photo.data
+            photo_name = photo.filename
             photo_path = os.path.join(
                 current_app.config['UPLOAD_FOLDER'],
                 photo.filename
@@ -105,7 +108,7 @@ def add_post():
             title=form.title.data,
             description=form.description.data,
             tags=form.tags.data,
-            photo_path=f'uploads/{photo_name if photo_name else None}'
+            photo_path=f'uploads/{photo_name if photo_name else ''}'
         )
         db.session.add(post)
         db.session.commit()
