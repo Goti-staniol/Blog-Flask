@@ -1,11 +1,23 @@
-from flask import render_template, Blueprint, flash, url_for, redirect
+import os
+
+from flask import (
+    render_template,
+    Blueprint,
+    flash,
+    url_for,
+    redirect,
+    current_app
+)
+
 from flask_login import login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+
 from sqlalchemy.exc import IntegrityError
 
 from app import login_manager, db
-from app.forms import RegistrationForm, LoginForm
-from app.database.models import User
+from app.forms import RegistrationForm, LoginForm, PostForm
+from app.database.models import User, Post
 
 
 main_route = Blueprint('main', __name__)
@@ -18,7 +30,8 @@ def load_user(user_id):
 
 @main_route.route('/')
 def home():
-    return render_template('index.html')
+    post = Post.query.all()
+    return render_template('index.html', post=post)
 
 
 @main_route.route('/registration', methods=['POST', 'GET'])
@@ -77,7 +90,20 @@ def login():
 @main_route.route('/add_post', methods=['POST', 'GET'])
 @login_required
 def add_post():
-    return 'Hello'
+    form = PostForm()
+    if form.validate_on_submit():
+        print(form.title.data)
+        print(form.description.data)
+        print(form.tags.data)
+        photo = form.photo.data
+
+        photo_path = os.path.join(
+            current_app.config['UPLOAD_FOLDER'],
+            photo.filename
+        )
+        photo.save(photo_path)
+
+    return render_template('post.html', form=form)
 
 
 

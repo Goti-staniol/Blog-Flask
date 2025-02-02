@@ -1,8 +1,6 @@
 from app import db
 from flask_login import UserMixin
 
-from werkzeug.security import generate_password_hash, check_password_hash
-
 
 class User(db.Model, UserMixin):
     user_id = db.Column(db.Integer, primary_key=True)
@@ -13,8 +11,12 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return str(self.user_id)
 
-class Post:
-    ...
+class Post(db.Model):
+    post_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    photo = db.Column(db.LargeBinary, nullable=True)
+    title = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(500), nullable=True)
 
 class Comment:
     ...
