@@ -16,7 +16,7 @@
           </div>
 
           {% if post.photo_path %}
-          <img src="{{ url_for('static', filename=post.photo_path) | utf-8 }}"
+          <img src="{{ url_for('static', filename=post.photo_path) }}"
                class="card-img-top"
                alt="Post image">
           {% endif %}
