@@ -1,4 +1,5 @@
 import os
+import re
 
 from flask import (
     render_template,
@@ -29,8 +30,8 @@ def load_user(user_id):
 
 @main_route.route('/')
 def home():
-    post = Post.query.all()
-    return render_template('index.html', post=post)
+    posts = Post.query.all()
+    return render_template('index.html', posts=posts, user=User)
 
 
 @main_route.route('/registration', methods=['POST', 'GET'])
@@ -91,7 +92,7 @@ def login():
 def add_post():
     form = PostForm()
     if form.validate_on_submit():
-        photo_path = None
+        photo_name = None
         if form.photo.data:
             photo = form.photo.data
             photo_path = os.path.join(
@@ -104,7 +105,7 @@ def add_post():
             title=form.title.data,
             description=form.description.data,
             tags=form.tags.data,
-            photo_path=photo_path
+            photo_path=f'uploads/{photo_name if photo_name else None}'
         )
         db.session.add(post)
         db.session.commit()

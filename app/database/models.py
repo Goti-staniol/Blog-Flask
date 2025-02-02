@@ -1,5 +1,6 @@
 from app import db
 from flask_login import UserMixin
+from datetime import datetime, UTC
 
 
 class User(db.Model, UserMixin):
@@ -19,6 +20,7 @@ class Post(db.Model):
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(500), nullable=False)
     tags = db.Column(db.String(80), nullable=True)
+    # created_at = db.Column(db.DateTime, default=datetime.now(UTC))
 
 
 class Comment:
