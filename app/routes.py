@@ -9,7 +9,7 @@ from flask import (
     current_app
 )
 
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
@@ -92,17 +92,26 @@ def login():
 def add_post():
     form = PostForm()
     if form.validate_on_submit():
-        print(form.title.data)
-        print(form.description.data)
-        print(form.tags.data)
-        photo = form.photo.data
-
-        photo_path = os.path.join(
-            current_app.config['UPLOAD_FOLDER'],
-            photo.filename
+        photo_path = None
+        if form.photo.data:
+            photo = form.photo.data
+            photo_path = os.path.join(
+                current_app.config['UPLOAD_FOLDER'],
+                photo.filename
+            )
+            photo.save(photo_path)
+        post = Post(
+            user_id=current_user.user_id,
+            title=form.title.data,
+            description=form.description.data,
+            tags=form.tags.data,
+            photo_path=photo_path
         )
-        photo.save(photo_path)
+        db.session.add(post)
+        db.session.commit()
+        db.session.close()
 
+        return redirect(url_for('main.home'))
     return render_template('post.html', form=form)
 
 
