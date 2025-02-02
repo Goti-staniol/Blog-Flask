@@ -11,6 +11,7 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return str(self.user_id)
 
+
 class Post(db.Model):
     post_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
@@ -18,6 +19,7 @@ class Post(db.Model):
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(500), nullable=False)
     tags = db.Column(db.String(80), nullable=True)
+
 
 class Comment:
     ...

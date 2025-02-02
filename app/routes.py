@@ -11,7 +11,6 @@ from flask import (
 
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename
 
 from sqlalchemy.exc import IntegrityError
 
