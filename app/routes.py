@@ -6,7 +6,8 @@ from flask import (
     flash,
     url_for,
     redirect,
-    current_app
+    current_app,
+    send_from_directory
 )
 
 from flask_login import login_user, logout_user, login_required, current_user
@@ -23,6 +24,11 @@ from app.database.models import User, Post
 main_route = Blueprint('main', __name__)
 
 
+@main_route.route('/static/uploads/<filename>')
+def serve_uploaded_file(filename):
+    return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -32,7 +38,7 @@ def load_user(user_id):
 def home():
     posts = Post.query.all()
     for post in posts:
-        print(post.photo_path)
+        print(post.photo_name)
     return render_template('index.html', posts=posts, user=User)
 
 
@@ -108,7 +114,7 @@ def add_post():
             title=form.title.data,
             description=form.description.data,
             tags=form.tags.data,
-            photo_path=f'uploads/{photo_name if photo_name else ''}'
+            photo_name=photo_name if photo_name else ''
         )
         db.session.add(post)
         db.session.commit()

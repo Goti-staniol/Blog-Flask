@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
 class Post(db.Model):
     post_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
-    photo_path = db.Column(db.String, nullable=True)
+    photo_name = db.Column(db.String, nullable=True)
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(500), nullable=False)
     tags = db.Column(db.String(80), nullable=True)
