@@ -1,4 +1,5 @@
 import os
+import uuid
 
 from flask import (
     render_template,
@@ -11,7 +12,6 @@ from flask import (
 )
 
 from flask_login import login_user, logout_user, login_required, current_user
-from sqlalchemy.dialects.postgresql.pg_catalog import pg_am
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from sqlalchemy.exc import IntegrityError
@@ -103,10 +103,11 @@ def add_post():
         photo_name = None
         if form.photo.data:
             photo = form.photo.data
-            photo_name = photo.filename
+            photo_name = str(uuid.uuid4()) + '.png'
+            photo_name.replace('-', '')
             photo_path = os.path.join(
                 current_app.config['UPLOAD_FOLDER'],
-                photo.filename
+                photo_name
             )
             photo.save(photo_path)
         post = Post(
@@ -122,9 +123,3 @@ def add_post():
 
         return redirect(url_for('main.home'))
     return render_template('post.html', form=form)
-
-
-
-
-
-
