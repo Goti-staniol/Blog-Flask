@@ -11,22 +11,23 @@ from flask import (
     send_from_directory
 )
 
-from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy.exc import IntegrityError
 
 from app import login_manager, db
-from app.forms import RegistrationForm, LoginForm, PostForm
 from app.database.models import User, Post
+from app.forms import (
+    RegistrationForm,
+    LoginForm,
+    PostForm,
+    validate_email,
+    validate_username
+)
 
 
 main_route = Blueprint('main', __name__)
-
-
-@main_route.route('/static/uploads/<filename>')
-def serve_uploaded_file(filename):
-    return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
 
 
 @login_manager.user_loader
@@ -37,8 +38,6 @@ def load_user(user_id):
 @main_route.route('/')
 def home():
     posts = Post.query.all()
-    for post in posts:
-        print(post.photo_name)
     return render_template('index.html', posts=posts, user=User)
 
 
@@ -103,8 +102,7 @@ def add_post():
         photo_name = None
         if form.photo.data:
             photo = form.photo.data
-            photo_name = str(uuid.uuid4()) + '.png'
-            photo_name.replace('-', '')
+            photo_name = (str(uuid.uuid4()) + '.png').replace('-', '')
             photo_path = os.path.join(
                 current_app.config['UPLOAD_FOLDER'],
                 photo_name
@@ -123,3 +121,8 @@ def add_post():
 
         return redirect(url_for('main.home'))
     return render_template('post.html', form=form)
+
+
+@main_route.route('/uploads/<filename>')
+def serve_uploaded_file(filename):
+    return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)

@@ -11,6 +11,18 @@ from wtforms import (
 
 from app.database.models import User
 
+
+def validate_username(username):
+    user = User.query.filter_by(username=username.data).first()
+    if user:
+        raise ValidationError('username занят')
+
+def validate_email(email):
+    user = User.query.filter_by(email=email.data).first()
+    if user:
+        raise ValidationError('email занят')
+
+
 class RegistrationForm(FlaskForm):
     username = StringField(
         label='Username',
@@ -25,16 +37,6 @@ class RegistrationForm(FlaskForm):
         validators=[DataRequired(), Length(min=8)]
     )
     submit = SubmitField('Sign Up')
-
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user:
-            raise ValidationError('username занят')
-
-    def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user:
-            raise ValidationError('email занят')
 
 
 class LoginForm(FlaskForm):
@@ -54,7 +56,6 @@ class PostForm(FlaskForm):
     description = TextAreaField('Описание', validators=[DataRequired()])
     tags = StringField('Теги')
     photo = FileField('Фото', validators=[
-        FileRequired(),
         FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Только изображения!')
     ])
     submit = SubmitField('Сохранить пост')
