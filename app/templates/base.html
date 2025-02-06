@@ -31,9 +31,16 @@
         <a class="nav-link active me-3" aria-current="page" href="/">Home</a>
         <a class="nav-link active" aria-current="page" href="/add_post">+ New Post</a>
       </div>
+      <form class="d-flex" method="POST" action="{{ url_for('main.home') }}">
+        {{ form.hidden_tag() }}
 
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <input class="form-control me-2"
+               type="search"
+               name="text"
+               placeholder="Search"
+               aria-label="Search"
+               required>
+
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
     </div>

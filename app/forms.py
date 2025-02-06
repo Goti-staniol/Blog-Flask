@@ -61,7 +61,9 @@ class PostForm(FlaskForm):
     submit = SubmitField('Сохранить пост')
 
 
-
+class SearchForm(FlaskForm):
+    text = StringField('Search', validators=[DataRequired()])
+    submit = SubmitField('Search')
 
 
 

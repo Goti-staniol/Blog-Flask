@@ -22,9 +22,12 @@ from app.forms import (
     RegistrationForm,
     LoginForm,
     PostForm,
+    SearchForm,
     validate_email,
     validate_username
 )
+
+from fuzzywuzzy import process
 
 
 main_route = Blueprint('main', __name__)
@@ -35,10 +38,20 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@main_route.route('/')
+@main_route.route('/', methods=['POST', 'GET'])
 def home():
+    form = SearchForm()
+    if form.validate_on_submit():
+        post_tags = db.session.query(Post.tags).all()
+        post_tags = [tag[0] for tag in post_tags]
+        matches = process.extract(form.text.data, post_tags, limit=1)
+        tags = [match[0] for match in matches]
+        posts = Post.query.filter(Post.tags.like(f"%{tags[0]}%")).all()
+
+        return render_template('index.html', posts=posts, form=form)
+
     posts = Post.query.all()
-    return render_template('index.html', posts=posts, user=User)
+    return render_template('index.html', posts=posts, form=form)
 
 
 @main_route.route('/registration', methods=['POST', 'GET'])
